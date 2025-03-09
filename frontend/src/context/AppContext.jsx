@@ -11,26 +11,31 @@ export const AppContextProvider=(props)=>{
 
     axios.defaults.withCredentials=true;
 
-    const getAuthState=async()=>{
+    const getAuthState = async () => {
         try {
-            const {data}=await axios.get(backendUrl + '/api/auth/is-auth')
-            if(data.success){
-                setIsLoggedIn(true)
-                getUserData()
+            const { data } = await axios.get(backendUrl + '/api/auth/is-auth');
+            if (data.success) {
+                setIsLoggedIn(true);
+                getUserData();
             }
         } catch (error) {
-            toast.error(data.message)
+            toast.error(error.response?.data?.message || "Error fetching auth state");
         }
-    }
-
-    const getUserData=async()=>{
+    };
+    
+    const getUserData = async () => {
         try {
-            const {data}=await axios.get(backendUrl + '/api/user/data')
-            data.success ? setUserData(data.userData) : toast.error(data.message)
+            const { data } = await axios.get(backendUrl + '/api/user/data');
+            if (data.success) {
+                setUserData(data.userData);
+            } else {
+                toast.error(data.message);
+            }
         } catch (error) {
-            toast.error(data.message)
+            toast.error(error.response?.data?.message || "Error fetching user data");
         }
-    }
+    };
+    
     
     useEffect(()=>{
         getAuthState()
