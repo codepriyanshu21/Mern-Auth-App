@@ -8,9 +8,11 @@ const userAuth = async (req, res, next) => {
         const token = req.cookies.token; // Get token from cookies
 
         if (!token) {
+            console.log(error.message);
             return res.status(401).json({
                 success: false,
                 message: "Not authorized, please login again.",
+                error: error.message
             });
         }
 
