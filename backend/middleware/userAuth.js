@@ -5,8 +5,8 @@ dotenv.config();
 
 const userAuth = async (req, res, next) => {
     try {
-        // Ensure the token exists in cookies
-        const token = req.cookies?.token;
+        const token = req.cookies.token; // Get token from cookies
+
         if (!token) {
             return res.status(401).json({
                 success: false,
@@ -14,19 +14,10 @@ const userAuth = async (req, res, next) => {
             });
         }
 
-        // Ensure JWT secret exists
-        if (!process.env.JWT_SECRET) {
-            console.error("JWT_SECRET is missing in environment variables.");
-            return res.status(500).json({
-                success: false,
-                message: "Server error. Please try again later.",
-            });
-        }
-
         // Verify JWT token
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-        if (!decodedToken || !decodedToken.id) {
+        if (!decodedToken?.id) {
             return res.status(403).json({
                 success: false,
                 message: "Invalid token, please login again.",
@@ -42,9 +33,7 @@ const userAuth = async (req, res, next) => {
 
         return res.status(403).json({
             success: false,
-            message: error.name === "TokenExpiredError"
-                ? "Session expired. Please login again."
-                : "Invalid or malformed token.",
+            message: "Invalid or expired token.",
         });
     }
 };
