@@ -247,6 +247,7 @@ export const verifyEmail=async(req,res)=>{
 // check if user is authenticated
 export const isAuthenticated=async(req,res)=>{
     try {
+        console.log("User from request:", req.user);
         return res.json({
             success:true,
         })
