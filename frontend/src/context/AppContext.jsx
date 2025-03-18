@@ -19,6 +19,7 @@ export const AppContextProvider=(props)=>{
                 getUserData();
             }
         } catch (error) {
+            setIsLoggedIn(false);
             toast.error(error.response?.data?.message || "Error fetching auth state");
         }
     };
@@ -29,9 +30,11 @@ export const AppContextProvider=(props)=>{
             if (data.success) {
                 setUserData(data.userData);
             } else {
+                setIsLoggedIn(false);
                 toast.error(data.message);
             }
         } catch (error) {
+            setIsLoggedIn(false);
             toast.error(error.response?.data?.message || "Error fetching user data");
         }
     };
